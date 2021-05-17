@@ -3,8 +3,6 @@
     <v-app-bar app color="primary" dark />
     <v-main>
       <HelloWorld v-if="this.$store.state.displayLoginForm" />
-      <HelloWorld v-else-if="this.$store.state.displaySignUpForm" />
-      <HelloWorld v-else-if="this.$store.state.isLoggedIn" />
       <div v-else>
         <v-text-field
           type="text"
@@ -51,15 +49,14 @@ export default class App extends Vue {
         password
     );
 
-    this.websocket.onclose = () => {
-      console.log("Handle this"); //TODO???
-    };
-
     this.websocket.addEventListener("message", (registerResponseJSON) => {
       let registerResponse = JSON.parse(registerResponseJSON.data);
-      console.log(registerResponse);
+      if (registerResponse.isRequestSuccessful) {
+        this.loadChattingInterface(username);
+      } else {
+        console.log("FAIL ", registerResponse); //TODO: handle sad paths
+      }
     });
-    console.log("Reg");
   }
 
   authenticateUser(): void {
@@ -76,15 +73,21 @@ export default class App extends Vue {
         password
     );
 
-    this.websocket.onclose = () => {
-      console.log("Handle this"); //TODO???
-    };
-
     this.websocket.addEventListener("message", (registerResponseJSON) => {
       let registerResponse = JSON.parse(registerResponseJSON.data);
-      console.log(registerResponse);
+      if (registerResponse.isRequestSuccessful) {
+        this.loadChattingInterface(username);
+      } else {
+        console.log("FAIL ", registerResponse); //TODO: handle sad paths
+      }
     });
     console.log("Reg");
+  }
+
+  loadChattingInterface(username: string): void {
+    this.$store.commit("setUsername", username); //TODO: refactor to cookie/auth token system
+    this.$store.commit("loginUser");
+    this.$store.commit("loadChattingPortal");
   }
 }
 </script>

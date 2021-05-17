@@ -8,6 +8,8 @@ export default new Vuex.Store({
     isLoggedIn: false,
     displayLoginForm: false,
     displaySignUpForm: false,
+    displayChattingPortal: false,
+    username: "",
   },
   mutations: {
     loginUser(state) {
@@ -27,6 +29,13 @@ export default new Vuex.Store({
     },
     hideSignUpForm(state) {
       state.displaySignUpForm = false;
+    },
+    loadChattingPortal(state) {
+      state.displayChattingPortal = true;
+    },
+    setUsername(state, loggedInUsername) {
+      //TODO: refactor to cookie/auth token system
+      state.username = loggedInUsername;
     },
   },
   getters: {},
