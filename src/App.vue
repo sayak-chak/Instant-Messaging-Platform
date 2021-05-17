@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="primary" dark />
     <v-main>
-      <HelloWorld v-if="this.$store.state.displayLoginForm" />
+      <MessagingPortal v-if="this.$store.state.isLoggedIn" />
       <div v-else>
         <v-text-field
           type="text"
@@ -23,10 +23,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import MessagingPortal from "./components/MessagingPortal.vue";
 @Component({
   components: {
-    HelloWorld,
+    MessagingPortal,
   },
 })
 export default class App extends Vue {

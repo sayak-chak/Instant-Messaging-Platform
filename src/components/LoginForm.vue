@@ -35,7 +35,7 @@ import HelloWorld from "./components/HelloWorld.vue";
     HelloWorld,
   },
 })
-export default class LoginForm extends Vue { 
+export default class LoginForm extends Vue {
   authenticateUser(): void {
     this.$store.commit("loginUser");
   }
