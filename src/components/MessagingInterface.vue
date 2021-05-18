@@ -1,31 +1,18 @@
 <template>
   <div>
-    <v-container>
-      <v-row>
-        <v-col
-          cols="12"
-          xs="12"
-          sm="5"
-          class="occupy-full-page full-page-border"
-        >
-          <v-card outlined color="transparent"
-            ><v-card-title>Active chat appears here..</v-card-title></v-card
-          >
-        </v-col>
-        <v-col cols="12" xs="0" sm="1" class="line"></v-col>
-        <v-col
-          cols="12"
-          xs="12"
-          sm="5"
-          class="occupy-full-page full-page-border"
-        >
-          <v-card outlined color="transparent">
-            <v-card-title>Press + to start a new convo..</v-card-title>
-          </v-card>
-          <!-- <v-row> </v-row> -->
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-card outlined>
+      <textarea
+        class="scrollabletextbox"
+        type="text"
+        id="chat-messages"
+        disabled
+      />
+      <br />
+    </v-card>
+    <span>
+      <textarea type="text" id="msg" />
+    </span>
+    <button @click="send()">Send</button>
   </div>
 </template>
 
@@ -34,7 +21,7 @@ import { Vue, Component } from "vue-property-decorator";
 @Component({
   components: {},
 })
-export default class MessagingPortal extends Vue {
+export default class MessagingInterface extends Vue {
   websocket!: WebSocket;
   outgoingChatMsg!: string;
 
@@ -87,15 +74,5 @@ export default class MessagingPortal extends Vue {
   font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
   font-size: 82%;
   overflow: scroll;
-}
-.occupy-full-page {
-  height: 100vh;
-}
-.full-page-border {
-  border: 2px solid red;
-}
-.line {
-  height: 100%;
-  color: black;
 }
 </style>

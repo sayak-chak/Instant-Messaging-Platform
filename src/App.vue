@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="primary" dark />
     <v-main>
-      <MessagingPortal v-if="this.$store.state.isLoggedIn" />
+      <!-- <MessagingInterface v-if="this.$store.state.isLoggedIn" />
       <div v-else>
         <v-text-field
           type="text"
@@ -16,18 +16,21 @@
         ></v-text-field>
         <v-btn @click="authenticateUser()">Login</v-btn>
         <v-btn @click="registerUser()">Sign Up</v-btn>
-      </div>
+      </div> -->
+      <MessagingPortal />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import MessagingInterface from "./components/MessagingInterface.vue";
 import MessagingPortal from "./components/MessagingPortal.vue";
 import config from "./../config.json";
 
 @Component({
   components: {
+    MessagingInterface,
     MessagingPortal,
   },
 })
