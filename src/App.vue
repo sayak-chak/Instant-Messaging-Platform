@@ -24,6 +24,8 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import MessagingPortal from "./components/MessagingPortal.vue";
+import config from "./../config.json";
+
 @Component({
   components: {
     MessagingPortal,
@@ -35,18 +37,26 @@ export default class App extends Vue {
     document.title = "Chat App";
   }
 
+  created(): void {
+    if (this.$cookies.isKey("AUTH-TOKEN")) {
+      this.$http
+        .post(config.API_HTTPS + "/logincheck", {
+          "AUTH-TOKEN": this.$cookies.get("AUTH-TOKEN"),
+        })
+        .then(
+          (response) => console.log(response.data),
+          (error) => console.log(error)
+        );
+    }
+  }
+
   registerUser(): void {
     let username = (document.getElementById("username") as HTMLInputElement)
       .value;
     let password = (document.getElementById("password") as HTMLInputElement)
       .value;
     this.websocket = new WebSocket(
-      "ws://" +
-        "localhost:3000" + //TODO: move to config files
-        "/register?username=" +
-        username +
-        "&password=" +
-        password
+      config.API_WS + "/register?username=" + username + "&password=" + password
     );
 
     this.websocket.addEventListener("message", (registerResponseJSON) => {
@@ -65,8 +75,7 @@ export default class App extends Vue {
     let password = (document.getElementById("password") as HTMLInputElement)
       .value;
     this.websocket = new WebSocket(
-      "ws://" +
-        "localhost:3000" + //TODO: move to config files
+      config.API_WS + //TODO: move to config files
         "/login?username=" +
         username +
         "&password=" +
