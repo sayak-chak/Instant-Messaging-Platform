@@ -94,11 +94,25 @@ export default class App extends Vue {
           config.API_WS +
             "/chat" +
             "?sender=" +
-            this.$store.state.username +
+            response.data.username +
             "&auth=" +
             response.data.auth
         );
         if (typeof response.data.username === "string") {
+          this.websocket.addEventListener("message", (incomingChatJSON) => {
+            let incomingChat = JSON.parse(incomingChatJSON.data);
+            if (
+              incomingChat.type == "Group" ||
+              (incomingChat.type == "Personal" &&
+                (incomingChat.sender == this.$store.state.currentChatter ||
+                  incomingChat.sender == this.$store.state.username))
+            ) {
+              this.$store.commit("appendMessage", {
+                sender: incomingChat.sender,
+                message: incomingChat.message,
+              });
+            }
+          });
           this.loadMessagingPortal(response.data.username);
         } else {
           //TODO: handle sad paths
@@ -123,6 +137,7 @@ export default class App extends Vue {
         (registerResponseJSON) => {
           if (registerResponseJSON.data.isRequestSuccessful) {
             this.loadMessagingPortal(username);
+            window.location.reload(); //TODO: refactor
           } else {
             //TODO: handle sad paths
           }
@@ -136,13 +151,6 @@ export default class App extends Vue {
       .value;
     let password = (document.getElementById("password") as HTMLInputElement)
       .value;
-    // let options = {
-    //   headers: {
-    //     "ACCESS-CONTROL-ALLOW-ORIGIN": config.API_HTTPS,
-    //     "Content-Type": "Application/json",
-    //   },
-    //   credentials: true,
-    // };
     this.$http
       .post(
         config.API_HTTPS + "/login",
@@ -156,6 +164,7 @@ export default class App extends Vue {
         (registerResponseJSON) => {
           if (registerResponseJSON.data.isRequestSuccessful) {
             this.loadMessagingPortal(username);
+            window.location.reload(); //TODO: refactor
           } else {
             //TODO: handle sad paths
           }

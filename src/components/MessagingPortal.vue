@@ -187,29 +187,7 @@ export default class MessagingPortal extends Vue {
     };
   }
 
-  establishConnectionWithChattingAPI(): void {
-    this.websocket.addEventListener("message", (incomingChatJSON) => {
-      let incomingChat = JSON.parse(incomingChatJSON.data);
-      if (
-        incomingChat.type == "Group" ||
-        (incomingChat.type == "Personal" &&
-          incomingChat.sender == this.$store.state.currentChatter)
-      ) {
-        this.$store.commit("appendMessage", {
-          sender: incomingChat.sender,
-          message: incomingChat.message,
-        });
-      }
-    });
-  }
-
   send(): void {
-    if (this.websocket == undefined || this.websocket.readyState != 1) {
-      //is not initialized
-      this.establishConnectionWithChattingAPI();
-      this.websocket.onopen = this.sendChatRequest;
-      return;
-    }
     this.sendChatRequest();
   }
 
