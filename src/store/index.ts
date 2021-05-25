@@ -10,6 +10,10 @@ export default new Vuex.Store({
     displaySignUpForm: false,
     displayChattingPortal: false,
     username: "",
+    chatList: ["Group"],
+    currentChatter: "Group",
+    chatMessages: [] as Record<string, string>[],
+    loadContactList: false,
   },
   mutations: {
     loginUser(state) {
@@ -36,6 +40,42 @@ export default new Vuex.Store({
     setUsername(state, loggedInUsername) {
       //TODO: refactor to cookie/auth token system
       state.username = loggedInUsername;
+    },
+    addToChatList(state, newUser: string) {
+      for (let index = 0; index < state.chatList.length; index++) {
+        if (state.chatList[index] == newUser) {
+          return;
+        }
+      }
+
+      state.chatList.push(newUser);
+    },
+
+    updateCurrentChatter(state, newChatter: string) {
+      if (state.currentChatter !== newChatter) {
+        state.currentChatter = newChatter;
+      }
+    },
+
+    resetChatMessages(state) {
+      state.chatMessages = [];
+    },
+
+    appendMessage(state, newSenderAndMessage: Record<string, string>) {
+      state.chatMessages.push(newSenderAndMessage);
+    },
+    appendMessages(state, newSenderAndMessages: Record<string, string>[]) {
+      for (let index = 0; index < newSenderAndMessages.length; index++) {
+        state.chatMessages.push(newSenderAndMessages[index]);
+      }
+    },
+
+    showContactList(state) {
+      state.loadContactList = true;
+    },
+
+    hideContactList(state) {
+      state.loadContactList = false;
     },
   },
   getters: {},
